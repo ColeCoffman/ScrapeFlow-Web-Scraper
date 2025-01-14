@@ -8,8 +8,9 @@ import {
   Controls,
   Background,
   BackgroundVariant,
+  useReactFlow,
 } from "@xyflow/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 import "@xyflow/react/dist/style.css";
 import { createFlowNode } from "@/lib/workflow/createFlowNode";
@@ -26,10 +27,22 @@ const fitViewOptions = {
 };
 
 const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([
-    createFlowNode(TaskType.LAUNCH_BROWSER, { x: 0, y: 0 }),
-  ]);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const { setViewport } = useReactFlow();
+  useEffect(() => {
+    try {
+      const flow = JSON.parse(workflow.definition);
+      if (!flow) return;
+      setNodes(flow.nodes || []);
+      setEdges(flow.edges || []);
+      if (!flow.viewport) return;
+      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+      setViewport({ x, y, zoom });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [workflow.definition, setNodes, setEdges, setViewport]);
 
   return (
     <main className="h-full w-full">
