@@ -98,11 +98,11 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
 
   const isValidConnection = useCallback(
     (connection: Edge | Connection) => {
-      console.log("Checking connection:", connection);
+      // console.log("Checking connection:", connection);
 
       // No self connections
       if (connection.source === connection.target) {
-        console.log("Invalid connection: source and target are the same.");
+        // console.log("Invalid connection: source and target are the same.");
         return false;
       }
 
@@ -110,14 +110,14 @@ const FlowEditor = ({ workflow }: { workflow: Workflow }) => {
       const sourceNode = nodes.find((n) => n.id === connection.source);
       const targetNode = nodes.find((n) => n.id === connection.target);
       if (!sourceNode || !targetNode) {
-        console.log("Invalid connection: source or target node not found.");
+        // console.log("Invalid connection: source or target node not found.");
         return false;
       }
 
       const sourceTask = TaskRegistry[sourceNode.data.type];
       const targetTask = TaskRegistry[targetNode.data.type];
       if (!sourceTask || !targetTask) {
-        console.log("Invalid connection: source or target task not found.");
+        // console.log("Invalid connection: source or target task not found.");
         return false;
       }
 

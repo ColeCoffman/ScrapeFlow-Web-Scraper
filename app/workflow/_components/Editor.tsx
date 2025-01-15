@@ -6,21 +6,25 @@ import { ReactFlowProvider } from "@xyflow/react";
 import FlowEditor from "./FlowEditor";
 import TopBar from "./topbar/TopBar";
 import TaskMenu from "./TaskMenu";
+import { FlowValidationContextProvider } from "@/components/context/FlowValidationContext";
+
 const Editor = ({ workflow }: { workflow: Workflow }) => {
   return (
-    <ReactFlowProvider>
-      <div className="w-full h-full flex flex-col overflow-hidden">
-        <TopBar
-          title="Workflow Editor"
-          subTitle={workflow.name}
-          workflowId={workflow.id}
-        />
-        <section className="flex h-full overflow-auto">
-          <TaskMenu />
-          <FlowEditor workflow={workflow} />
-        </section>
-      </div>
-    </ReactFlowProvider>
+    <FlowValidationContextProvider>
+      <ReactFlowProvider>
+        <div className="w-full h-full flex flex-col overflow-hidden">
+          <TopBar
+            title="Workflow Editor"
+            subTitle={workflow.name}
+            workflowId={workflow.id}
+          />
+          <section className="flex h-full overflow-auto">
+            <TaskMenu />
+            <FlowEditor workflow={workflow} />
+          </section>
+        </div>
+      </ReactFlowProvider>
+    </FlowValidationContextProvider>
   );
 };
 
