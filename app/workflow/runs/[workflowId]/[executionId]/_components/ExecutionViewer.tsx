@@ -42,6 +42,7 @@ import {
   TableHead,
 } from "@/components/ui/table";
 import PhaseStatusBadge from "./PhaseStatusBadge";
+import ReactCountUpWrapper from "@/components/ReactCountUpWrapper";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -124,7 +125,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
           />
           <ExecutionLabel
             label="Credits Used"
-            value={creditsUsed}
+            value={<ReactCountUpWrapper value={creditsUsed} />}
             icon={CoinsIcon}
           />
         </div>
@@ -186,7 +187,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
                   <CoinsIcon size={18} className="stroke-muted-foreground" />
                   <span>Credits Used</span>
                 </div>
-                <span>{creditsUsed}</span>
+                <span>{phaseDetails.data.creditsConsumed}</span>
               </Badge>
               <Badge variant="outline" className="space-x-4">
                 <div className="flex gap-1 items-center">
