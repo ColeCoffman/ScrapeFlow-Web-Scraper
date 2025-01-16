@@ -7,7 +7,6 @@ export const LaunchBrowserExecutor = async (
 ): Promise<boolean> => {
   try {
     const websiteUrl = environment.getInput("Website Url");
-    console.log("@@WEBSITE_URL", websiteUrl);
     const browser = await puppeteer.launch({
       headless: false, // TESTING
     });
@@ -16,8 +15,8 @@ export const LaunchBrowserExecutor = async (
     await page.goto(websiteUrl);
     environment.setPage(page);
     return true;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    environment.log.error(error.message);
     return false;
   }
 };
