@@ -7,6 +7,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import SaveButton from "./SaveButton";
 import ExecuteButton from "./ExecuteButton";
+import NavigationTabs from "./NavigationTabs";
 interface TopBarProps {
   title: string;
   subTitle?: string;
@@ -33,12 +34,15 @@ const TopBar = ({ title, subTitle, workflowId, hideButtons }: TopBarProps) => {
           )}
         </div>
       </div>
-      {!hideButtons && (
-        <div className="flex gap-1 flex-1 justify-end">
-          <ExecuteButton workflowId={workflowId} />
-          <SaveButton workflowId={workflowId} />
-        </div>
-      )}
+      <NavigationTabs workflowId={workflowId} />
+      <div className="flex gap-1 flex-1 justify-end">
+        {!hideButtons && (
+          <>
+            <ExecuteButton workflowId={workflowId} />
+            <SaveButton workflowId={workflowId} />
+          </>
+        )}
+      </div>
     </header>
   );
 };
