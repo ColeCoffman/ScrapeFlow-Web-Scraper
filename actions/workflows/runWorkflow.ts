@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { ExecuteWorkflow } from "@/lib/workflow/executeWorkflow";
 import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import {
@@ -59,6 +60,7 @@ export async function runWorkflow(form: {
       trigger: WorkflowExecutionTrigger.MANUAL,
       startedAt: new Date(),
       status: WorkflowExecutionStatus.PENDING,
+      definition: flowDefinition,
       phases: {
         create: executionPlan.flatMap((phase) => {
           return phase.nodes.flatMap((node) => {
@@ -83,5 +85,7 @@ export async function runWorkflow(form: {
     throw new Error("Workflow execution not created");
   }
 
-  redirect(`/workflows/runs/${workflowId}/${execution.id}`);
+  ExecuteWorkflow(execution.id); // Runs in the background
+
+  redirect(`/workflow/runs/${workflowId}/${execution.id}`);
 }
