@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import TooltipWrapper from "@/components/TooltipWrapper";
 import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
+import RunButton from "./RunButton";
 
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
@@ -65,6 +66,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          {!isDraft && <RunButton workflowId={workflow.id} />}
           <Link
             href={`/workflow/editor/${workflow.id}`}
             className={cn(
