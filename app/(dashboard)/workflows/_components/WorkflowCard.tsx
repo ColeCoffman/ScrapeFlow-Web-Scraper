@@ -32,9 +32,12 @@ import TooltipWrapper from "@/components/TooltipWrapper";
 import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 import RunButton from "./RunButton";
 import SchedulerDialog from "./SchedulerDialog";
-import ExecutionStatusIndicator from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
+import ExecutionStatusIndicator, {
+  ExecutionStatusLabel,
+} from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
 import { formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import DuplicateWorkflowDialog from "./DuplicateWorkflowDialog";
 
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
@@ -43,7 +46,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
     [WorkflowStatus.PUBLISHED]: "bg-primary",
   };
   return (
-    <Card className="border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30">
+    <Card className="border border-separate shadow-sm rounded-lg overflow-hidden hover:shadow-md dark:shadow-primary/30 group/card">
       <CardContent className="p-4 flex items-center justify-between h-[100px]">
         <div className="flex items-center justify-end space-x-3">
           <div
@@ -71,6 +74,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
                   Draft
                 </span>
               )}
+              <DuplicateWorkflowDialog workflowId={workflow.id} />
             </h3>
             <ScheduleSection
               isDraft={isDraft}
@@ -225,7 +229,9 @@ const LastRunDetails = ({ workflow }: { workflow: Workflow }) => {
             <ExecutionStatusIndicator
               status={lastRunStatus as WorkflowExecutionStatus}
             />
-            <span>{lastRunStatus}</span>
+            <ExecutionStatusLabel
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
             <span>{formattedStartedAt}</span>
             <ChevronRightIcon
               size={14}

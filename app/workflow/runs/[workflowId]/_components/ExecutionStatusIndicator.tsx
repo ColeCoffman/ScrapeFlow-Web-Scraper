@@ -9,12 +9,29 @@ const statusColors: Record<WorkflowExecutionStatus, string> = {
   FAILED: "bg-red-400",
 };
 
-const ExecutionStatusIndicator = ({
+const labelColors: Record<WorkflowExecutionStatus, string> = {
+  PENDING: "text-slate-400",
+  RUNNING: "text-yellow-400",
+  COMPLETED: "text-green-400",
+  FAILED: "text-red-400",
+};
+
+export default function ExecutionStatusIndicator({
+  status,
+}: {
+  status: WorkflowExecutionStatus;
+}) {
+  return <div className={cn("w-2 h-2 rounded-full", statusColors[status])} />;
+}
+
+export const ExecutionStatusLabel = ({
   status,
 }: {
   status: WorkflowExecutionStatus;
 }) => {
-  return <div className={cn("w-2 h-2 rounded-full", statusColors[status])} />;
+  return (
+    <span className={cn("capitalize", labelColors[status])}>
+      {status.toLowerCase()}
+    </span>
+  );
 };
-
-export default ExecutionStatusIndicator;
