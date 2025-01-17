@@ -24,6 +24,8 @@ model Workflow {
   lastRunAt     DateTime?
   lastRunId     String?
   lastRunStatus String?
+  cron          String?
+  nextRunAt     DateTime?
 
   executions WorkflowExecution[]
 
