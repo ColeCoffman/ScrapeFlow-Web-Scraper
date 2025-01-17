@@ -4,9 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { WorkflowStatus } from "@/types/workflow";
+import { WorkflowExecutionStatus, WorkflowStatus } from "@/types/workflow";
 import { Workflow } from "@prisma/client";
 import {
+  ChevronRightIcon,
+  ClockIcon,
   CoinsIcon,
   CornerDownRightIcon,
   MoreVerticalIcon,
@@ -30,6 +32,9 @@ import TooltipWrapper from "@/components/TooltipWrapper";
 import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 import RunButton from "./RunButton";
 import SchedulerDialog from "./SchedulerDialog";
+import ExecutionStatusIndicator from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
+import { formatDistanceToNow } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
@@ -96,6 +101,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           />
         </div>
       </CardContent>
+      <LastRunDetails workflow={workflow} />
     </Card>
   );
 };
@@ -177,6 +183,66 @@ const ScheduleSection = ({
           </Badge>
         </div>
       </TooltipWrapper>
+    </div>
+  );
+};
+
+const LastRunDetails = ({ workflow }: { workflow: Workflow }) => {
+  const { lastRunAt, lastRunStatus, lastRunId, nextRunAt } = workflow;
+  const formattedStartedAt =
+    lastRunAt && formatDistanceToNow(lastRunAt, { addSuffix: true });
+  const nextScheduledRun =
+    nextRunAt && formatDistanceToNow(nextRunAt, { addSuffix: true });
+  const nextScheduledRunUTC =
+    nextRunAt && formatInTimeZone(nextRunAt, "UTC", "MMM d, yyyy h:mm a");
+  const isDraft = workflow.status === WorkflowStatus.DRAFT;
+
+  if (workflow.id === "cm5ztitkq0014lvhfrogc8oml") {
+    console.log(nextRunAt?.toLocaleString());
+  }
+
+  if (isDraft) return null;
+  return (
+    <div
+      className={cn(
+        "px-4 py-1 flex justify-between items-center text-muted-foreground",
+        lastRunStatus === WorkflowExecutionStatus.COMPLETED
+          ? "bg-green-500/5"
+          : lastRunStatus === WorkflowExecutionStatus.FAILED
+          ? "bg-red-500/5"
+          : lastRunStatus === WorkflowExecutionStatus.RUNNING
+          ? "bg-yellow-500/5"
+          : "bg-primary/5"
+      )}
+    >
+      <div className="flex items-center gap-2 text-sm">
+        {lastRunAt && (
+          <Link
+            href={`/workflow/runs/${workflow.id}/${lastRunId}`}
+            className="flex items-center gap-2 group"
+          >
+            <span>Last run:</span>
+            <ExecutionStatusIndicator
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
+            <span>{lastRunStatus}</span>
+            <span>{formattedStartedAt}</span>
+            <ChevronRightIcon
+              size={14}
+              className="-translate-x-[2px] group-hover:translate-x-0 transition"
+            />
+          </Link>
+        )}
+        {!lastRunAt && <span>No executions yet</span>}
+      </div>
+      {nextRunAt && (
+        <div className="flex items-center gap-2 text-sm">
+          <ClockIcon size={12} />
+          <span>Next run:</span>
+          <span>{nextScheduledRun}</span>
+          <span className="text-xs">({nextScheduledRunUTC} UTC)</span>
+        </div>
+      )}
     </div>
   );
 };
