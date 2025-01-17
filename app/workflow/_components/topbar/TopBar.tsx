@@ -8,15 +8,25 @@ import { useRouter } from "next/navigation";
 import SaveButton from "./SaveButton";
 import ExecuteButton from "./ExecuteButton";
 import NavigationTabs from "./NavigationTabs";
+import PublishButton from "./PublishButton";
+import UnpublishButton from "./UnpublishButton";
 interface TopBarProps {
   title: string;
   subTitle?: string;
   workflowId: string;
   hideButtons?: boolean;
+  isPublished?: boolean;
 }
 
-const TopBar = ({ title, subTitle, workflowId, hideButtons }: TopBarProps) => {
+const TopBar = ({
+  title,
+  subTitle,
+  workflowId,
+  hideButtons,
+  isPublished = false,
+}: TopBarProps) => {
   const router = useRouter();
+
   return (
     <header className="flex p-2 border-b-2 border-separate justify-between w-full h-[60px] sticky top-0 bg-background z-10">
       <div className="flex gap-1 flex-1">
@@ -39,7 +49,13 @@ const TopBar = ({ title, subTitle, workflowId, hideButtons }: TopBarProps) => {
         {!hideButtons && (
           <>
             <ExecuteButton workflowId={workflowId} />
-            <SaveButton workflowId={workflowId} />
+            {isPublished && <UnpublishButton workflowId={workflowId} />}
+            {!isPublished && (
+              <>
+                <SaveButton workflowId={workflowId} />
+                <PublishButton workflowId={workflowId} />
+              </>
+            )}
           </>
         )}
       </div>
