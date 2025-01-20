@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Layers2Icon, Loader2Icon } from "lucide-react";
+import { Layers2Icon, Loader2Icon, ShieldIcon } from "lucide-react";
 import CustomDialogHeader from "@/components/CustomDialogHeader";
 import { useForm } from "react-hook-form";
 import {
@@ -17,7 +17,6 @@ import {
   createWorkflowSchemaType,
 } from "@/schema/workflow";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   FormControl,
   FormDescription,
@@ -32,28 +31,33 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { createWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
+import { createCredentialSchema } from "@/schema/credential";
+import { createCredentialSchemaType } from "@/schema/credential";
+import { createCredential } from "@/actions/credentials/createCredential";
 
-const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
+const CreateCredentialDialog = ({ triggerText }: { triggerText?: string }) => {
   const [open, setOpen] = useState(false);
 
-  const form = useForm<createWorkflowSchemaType>({
-    resolver: zodResolver(createWorkflowSchema),
+  const form = useForm<createCredentialSchemaType>({
+    resolver: zodResolver(createCredentialSchema),
     defaultValues: {},
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: createWorkflow,
+    mutationFn: createCredential,
     onSuccess: () => {
-      toast.success("Workflow created successfully", { id: "create-workflow" });
+      toast.success("Credential created successfully", {
+        id: "create-credential",
+      });
     },
     onError: (error) => {
-      toast.error(error.message, { id: "create-workflow" });
+      toast.error(error.message, { id: "create-credential" });
     },
   });
 
   const onSubmit = useCallback(
-    (values: createWorkflowSchemaType) => {
-      toast.loading("Creating workflow...", { id: "create-workflow" });
+    (values: createCredentialSchemaType) => {
+      toast.loading("Creating credential...", { id: "create-credential" });
       mutate(values);
     },
     [mutate]
@@ -68,14 +72,10 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
       }}
     >
       <DialogTrigger asChild>
-        <Button>{triggerText ?? "Create Workflow"}</Button>
+        <Button>{triggerText ?? "Create Credential"}</Button>
       </DialogTrigger>
       <DialogContent className="px-0">
-        <CustomDialogHeader
-          icon={Layers2Icon}
-          title="Create Workflow"
-          subTitle="Create a new workflow to start scraping data."
-        />
+        <CustomDialogHeader icon={ShieldIcon} title="Create Credential" />
         <div className="p-6">
           <Form {...form}>
             <form
@@ -95,7 +95,10 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
                       <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Choose a name for your workflow.
+                      Enter a unique and descriptive name for your credential.
+                      <br />
+                      This name will be used to identify credentials in your
+                      workflows.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -103,17 +106,21 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
               />
               <FormField
                 control={form.control}
-                name="description"
+                name="value"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex gap-1 items-center">
-                      Description
-                      <p className="text-xs text-primary">(optional)</p>
+                      Value
+                      <p className="text-xs text-primary">(required)</p>
                     </FormLabel>
                     <FormControl>
                       <Textarea className="resize-none" {...field} />
                     </FormControl>
-                    <FormDescription>Describe your workflow.</FormDescription>
+                    <FormDescription>
+                      Enter the value for your credential.
+                      <br />
+                      This value will be encrypted and stored securely.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -133,4 +140,4 @@ const CreateWorkflowDialog = ({ triggerText }: { triggerText?: string }) => {
   );
 };
 
-export default CreateWorkflowDialog;
+export default CreateCredentialDialog;
