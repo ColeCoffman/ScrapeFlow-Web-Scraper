@@ -6,6 +6,8 @@ import StringParam from "./param/StringParam";
 import { useReactFlow } from "@xyflow/react";
 import { AppNode } from "@/types/appNode";
 import BrowserInstanceParam from "./param/BrowserInstanceParam";
+import SelectParam from "./param/SelectParam";
+import NumberParam from "./param/NumberParam";
 
 const NodeParamField = ({
   param,
@@ -26,7 +28,7 @@ const NodeParamField = ({
         inputs: { ...node?.data.inputs, [param.name]: value },
       });
     },
-    [nodeId, param.name, updateNodeData, node?.data.inputs]
+    [updateNodeData, nodeId, node?.data, param.name]
   );
 
   switch (param.type) {
@@ -45,6 +47,23 @@ const NodeParamField = ({
           param={param}
           value={""}
           updateNodeParamValue={updateNodeParamValue}
+        />
+      );
+    case TaskParamType.SELECT:
+      return (
+        <SelectParam
+          param={param}
+          value={value}
+          updateNodeParamValue={updateNodeParamValue}
+        />
+      );
+    case TaskParamType.NUMBER:
+      return (
+        <NumberParam
+          param={param}
+          value={value}
+          updateNodeParamValue={updateNodeParamValue}
+          disabled={disabled}
         />
       );
     default:

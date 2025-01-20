@@ -2,11 +2,19 @@ export enum TaskType {
   LAUNCH_BROWSER = "LAUNCH_BROWSER",
   PAGE_TO_HTML = "PAGE_TO_HTML",
   EXTRACT_TEXT_FROM_ELEMENT = "EXTRACT_TEXT_FROM_ELEMENT",
+  FILL_INPUT = "FILL_INPUT",
+  CLICK_ELEMENT = "CLICK_ELEMENT",
+  WAIT_FOR_ELEMENT = "WAIT_FOR_ELEMENT",
+  DELAY = "DELAY",
+  DELIVER_VIA_WEBHOOK = "DELIVER_VIA_WEBHOOK",
 }
 
 export enum TaskParamType {
   STRING = "STRING",
   BROWSER_INSTANCE = "BROWSER_INSTANCE",
+  SELECT = "SELECT",
+  NUMBER = "NUMBER",
+  BOOLEAN = "BOOLEAN",
 }
 
 export interface TaskParam {
@@ -16,4 +24,9 @@ export interface TaskParam {
   required?: boolean;
   hideHandle?: boolean;
   [key: string]: any;
+}
+
+export interface SelectOption {
+  label: string;
+  value: string;
 }

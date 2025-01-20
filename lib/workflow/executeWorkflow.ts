@@ -210,7 +210,10 @@ const executePhase = async (
   logCollector: LogCollector
 ): Promise<boolean> => {
   const runFunction = ExecutorRegistry[node.data.type];
-  if (!runFunction) return false;
+  if (!runFunction) {
+    logCollector.error(`No executor found for node ${node.data.type}`);
+    return false;
+  }
 
   const executionEnvironment: ExecutionEnvironment<any> =
     createExecutionEnvironment(node, environment, logCollector);
