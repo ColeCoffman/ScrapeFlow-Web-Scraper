@@ -7,6 +7,8 @@ export enum TaskType {
   WAIT_FOR_ELEMENT = "WAIT_FOR_ELEMENT",
   DELAY = "DELAY",
   DELIVER_VIA_WEBHOOK = "DELIVER_VIA_WEBHOOK",
+  EXTRACT_DATA_WITH_AI = "EXTRACT_DATA_WITH_AI",
+  READ_PROPERTY_FROM_JSON = "READ_PROPERTY_FROM_JSON",
 }
 
 export enum TaskParamType {
@@ -15,6 +17,7 @@ export enum TaskParamType {
   SELECT = "SELECT",
   NUMBER = "NUMBER",
   BOOLEAN = "BOOLEAN",
+  CREDENTIAL = "CREDENTIAL",
 }
 
 export interface TaskParam {

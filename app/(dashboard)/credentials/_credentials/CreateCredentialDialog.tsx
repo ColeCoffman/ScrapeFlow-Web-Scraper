@@ -49,6 +49,8 @@ const CreateCredentialDialog = ({ triggerText }: { triggerText?: string }) => {
       toast.success("Credential created successfully", {
         id: "create-credential",
       });
+      form.reset();
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(error.message, { id: "create-credential" });

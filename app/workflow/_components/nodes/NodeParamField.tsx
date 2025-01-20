@@ -8,6 +8,7 @@ import { AppNode } from "@/types/appNode";
 import BrowserInstanceParam from "./param/BrowserInstanceParam";
 import SelectParam from "./param/SelectParam";
 import NumberParam from "./param/NumberParam";
+import CredentialParam from "./param/CredentialsParam";
 
 const NodeParamField = ({
   param,
@@ -52,6 +53,14 @@ const NodeParamField = ({
     case TaskParamType.SELECT:
       return (
         <SelectParam
+          param={param}
+          value={value}
+          updateNodeParamValue={updateNodeParamValue}
+        />
+      );
+    case TaskParamType.CREDENTIAL:
+      return (
+        <CredentialParam
           param={param}
           value={value}
           updateNodeParamValue={updateNodeParamValue}
