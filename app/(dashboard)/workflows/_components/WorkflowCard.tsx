@@ -203,10 +203,6 @@ const LastRunDetails = ({ workflow }: { workflow: Workflow }) => {
     nextRunAt && formatInTimeZone(nextRunAt, "UTC", "MMM d, yyyy h:mm a");
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
 
-  if (workflow.id === "cm5ztitkq0014lvhfrogc8oml") {
-    console.log(nextRunAt?.toLocaleString());
-  }
-
   if (isDraft) return null;
   return (
     <div

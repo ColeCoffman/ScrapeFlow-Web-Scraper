@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/accordion";
 import { TaskType } from "@/types/task";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { CoinsIcon } from "lucide-react";
 
 const TaskMenu = () => {
   return (
@@ -87,19 +89,23 @@ const TaskMenuButton = ({ taskType }: { taskType: TaskType }) => {
     e.dataTransfer.effectAllowed = "move";
   };
   return (
-    <div className="flex gap-2">
-      <Button
-        variant="secondary"
-        className="flex justify-between items-center gap-2 border w-full"
-        draggable
-        onDragStart={(e) => {
-          onDragStart(e, taskType);
-        }}
-      >
+    <Button
+      variant="secondary"
+      className="flex justify-between items-center gap-2 border w-full"
+      draggable
+      onDragStart={(e) => {
+        onDragStart(e, taskType);
+      }}
+    >
+      <div className="flex gap-2">
         <task.icon size={20} />
         {task.label}
-      </Button>
-    </div>
+      </div>
+      <Badge className="flex items-center gap-2" variant="outline">
+        <CoinsIcon size={16} />
+        {task.credits}
+      </Badge>
+    </Button>
   );
 };
 
