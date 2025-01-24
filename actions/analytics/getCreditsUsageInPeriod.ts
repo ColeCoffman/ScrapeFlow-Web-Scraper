@@ -6,6 +6,7 @@ import { Period } from "@/types/analytics";
 import { PeriodToDateRange } from "@/lib/helper/dates";
 import { eachDayOfInterval, format } from "date-fns";
 import { ExecutionPhaseStatus } from "@/types/workflow";
+import { ExecutionPhase } from "@prisma/client";
 
 type Stats = Record<string, { total: number; success: number; failed: number }>;
 
@@ -46,7 +47,7 @@ export const getCreditsUsageInPeriod = async (period: Period) => {
       return acc;
     }, {} as Stats);
 
-  executionPhases.forEach((phase) => {
+  executionPhases.forEach((phase: ExecutionPhase) => {
     const date = format(phase.startedAt!, dateFormat);
     stats[date].total++;
     if (phase.status === ExecutionPhaseStatus.COMPLETED) {
