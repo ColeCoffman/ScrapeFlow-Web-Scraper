@@ -9,15 +9,15 @@ import {
   WorkflowExecutionPlan,
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
+  WorkflowStatus,
 } from "@/types/workflow";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { WorkflowStatus } from "@/types/workflow";
 export async function runWorkflow(form: {
   workflowId: string;
   flowDefinition?: string;
 }) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");

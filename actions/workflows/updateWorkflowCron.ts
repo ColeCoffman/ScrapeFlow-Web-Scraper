@@ -1,18 +1,18 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import parser from "cron-parser";
 import { revalidatePath } from "next/cache";
 
 export const updateWorkflowCron = async ({
-  id,
+  workflowId,
   cron,
 }: {
-  id: string;
+  workflowId: string;
   cron: string;
 }) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
@@ -22,7 +22,7 @@ export const updateWorkflowCron = async ({
   try {
     const interval = parser.parseExpression(cron, { utc: true });
     await prisma.workflow.update({
-      where: { id, userId },
+      where: { id: workflowId, userId },
       data: { cron, nextRunAt: interval.next().toDate() },
     });
   } catch (error: any) {

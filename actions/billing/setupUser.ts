@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export const SetupUser = async () => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
@@ -14,7 +14,7 @@ export const SetupUser = async () => {
   });
   if (!balance) {
     await prisma.userBalance.create({
-      data: { userId, credits: 100 },
+      data: { userId, credits: 10 },
     });
   }
 

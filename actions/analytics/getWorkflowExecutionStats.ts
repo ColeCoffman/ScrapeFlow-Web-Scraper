@@ -1,16 +1,16 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { PeriodToDateRange } from "@/lib/helper/dates";
 import prisma from "@/lib/prisma";
 import { Period } from "@/types/analytics";
-import { PeriodToDateRange } from "@/lib/helper/dates";
-import { eachDayOfInterval, format } from "date-fns";
 import { WorkflowExecutionStatus } from "@/types/workflow";
+import { auth } from "@clerk/nextjs/server";
+import { eachDayOfInterval, format } from "date-fns";
 
 type Stats = Record<string, { total: number; success: number; failed: number }>;
 
 export const getWorkflowExecutionStats = async (period: Period) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
