@@ -1,10 +1,27 @@
 "use client";
 
-import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
-import { GetWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails";
+import { getWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
+import { getWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails";
+import ReactCountUpWrapper from "@/components/ReactCountUpWrapper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { DatesToDuration } from "@/lib/helper/dates";
 import { GetPhasesTotalCost } from "@/lib/helper/phases";
 import { cn } from "@/lib/utils";
@@ -12,6 +29,7 @@ import {
   ExecutionPhaseStatus,
   WorkflowExecutionStatus,
 } from "@/types/workflow";
+import { ExecutionLog } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -24,27 +42,9 @@ import {
   WorkflowIcon,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { ExecutionLog } from "@prisma/client";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHeader,
-  TableHead,
-} from "@/components/ui/table";
 import PhaseStatusBadge from "./PhaseStatusBadge";
-import ReactCountUpWrapper from "@/components/ReactCountUpWrapper";
 
-type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
+type ExecutionData = Awaited<ReturnType<typeof getWorkflowExecutionWithPhases>>;
 
 const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
@@ -52,7 +52,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   const query = useQuery({
     queryKey: ["execution", initialData?.id],
     initialData,
-    queryFn: () => GetWorkflowExecutionWithPhases(initialData!.id),
+    queryFn: () => getWorkflowExecutionWithPhases(initialData!.id),
     refetchInterval: (query) =>
       query.state.data?.status === WorkflowExecutionStatus.RUNNING
         ? 1000
@@ -62,7 +62,7 @@ const ExecutionViewer = ({ initialData }: { initialData: ExecutionData }) => {
   const phaseDetails = useQuery({
     queryKey: ["phaseDetails", selectedPhase, query.data?.status],
     enabled: selectedPhase !== null,
-    queryFn: () => GetWorkflowPhaseDetails(selectedPhase!),
+    queryFn: () => getWorkflowPhaseDetails(selectedPhase!),
   });
 
   const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;

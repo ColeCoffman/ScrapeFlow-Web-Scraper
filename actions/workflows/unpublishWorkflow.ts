@@ -1,11 +1,11 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow";
+import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 export const unpublishWorkflow = async (workflowId: string) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     throw new Error("User not authenticated");
   }

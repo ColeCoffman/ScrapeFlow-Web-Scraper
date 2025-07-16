@@ -7,7 +7,7 @@ import { WorkflowExecutionStatus } from "@/types/workflow";
 import { auth } from "@clerk/nextjs/server";
 
 export const getStatsCardsValues = async (selectedPeriod: Period) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     throw new Error("User not found");
   }

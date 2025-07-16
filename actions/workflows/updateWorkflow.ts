@@ -1,8 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 import { WorkflowStatus } from "@/types/workflow";
+import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 const updateWorkflow = async ({
   id,
@@ -11,7 +11,7 @@ const updateWorkflow = async ({
   id: string;
   definition: string;
 }) => {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("Unauthorized");

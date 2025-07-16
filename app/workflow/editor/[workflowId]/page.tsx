@@ -1,13 +1,10 @@
-import React from "react";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { waitFor } from "@/lib/helper/waitFor";
+import { auth } from "@clerk/nextjs/server";
 import Editor from "../../_components/Editor";
 
 const EditorPage = async ({ params }: { params: { workflowId: string } }) => {
   const { workflowId } = params;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return <div>You are not authorized to access this page</div>;

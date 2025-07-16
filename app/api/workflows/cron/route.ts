@@ -1,9 +1,7 @@
-import { NextRequest } from "next/server";
-
-import { NextResponse } from "next/server";
+import { getAppUrl } from "@/lib/helper/appUrl";
 import prisma from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow";
-import { getAppUrl } from "@/lib/helper/appUrl";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const now = new Date();
@@ -41,7 +39,6 @@ const triggerWorkflow = async (workflowId: string) => {
     headers: {
       Authorization: `Bearer ${process.env.API_SECRET!}`,
     },
-    cache: "no-store",
   }).catch((error) => {
     console.error(
       `Error triggering workflow with id ${workflowId} : ${error.message}`

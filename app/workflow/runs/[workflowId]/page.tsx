@@ -1,7 +1,7 @@
-import React, { Suspense } from "react";
-import TopBar from "../../_components/topbar/TopBar";
-import { GetWorkflowExecutions } from "@/actions/workflows/getWorkflowExecutions";
+import { getWorkflowExecutions } from "@/actions/workflows/getWorkflowExecutions";
 import { InboxIcon, Loader2Icon } from "lucide-react";
+import { Suspense } from "react";
+import TopBar from "../../_components/topbar/TopBar";
 import ExecutionsTable from "./_components/ExecutionsTable";
 
 const ExecutionsPage = ({ params }: { params: { workflowId: string } }) => {
@@ -31,7 +31,7 @@ const ExecutionsTableWrapper = async ({
 }: {
   workflowId: string;
 }) => {
-  const executions = await GetWorkflowExecutions(workflowId);
+  const executions = await getWorkflowExecutions(workflowId);
   if (!executions) {
     return <div>No executions found</div>;
   }
