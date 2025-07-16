@@ -1,31 +1,29 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { removeWorkflowSchedule } from "@/actions/workflows/removeWorkflowSchedule";
+import { updateWorkflowCron } from "@/actions/workflows/updateWorkflowCron";
+import CustomDialogHeader from "@/components/CustomDialogHeader";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import parser from "cron-parser";
+import cronstrue from "cronstrue";
 import {
-  TriangleAlertIcon,
   CalendarIcon,
   ClockIcon,
   TrashIcon,
+  TriangleAlertIcon,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import CustomDialogHeader from "@/components/CustomDialogHeader";
-import { Input } from "@/components/ui/input";
-import { useMutation } from "@tanstack/react-query";
-import { updateWorkflowCron } from "@/actions/workflows/updateWorkflowCron";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import cronstrue from "cronstrue";
-import parser from "cron-parser";
-import { removeWorkflowSchedule } from "@/actions/workflows/removeWorkflowSchedule";
 
 const SchedulerDialog = (props: {
   workflowId: string;
@@ -123,7 +121,7 @@ const SchedulerDialog = (props: {
                 disabled={removeMutation.isPending}
                 onClick={() => {
                   toast.loading("Removing schedule...", { id: "cron" });
-                  removeMutation.mutate({ id: props.workflowId });
+                  removeMutation.mutate(props.workflowId);
                 }}
               >
                 <TrashIcon className="w-3 h-3" />
@@ -143,7 +141,7 @@ const SchedulerDialog = (props: {
               className="w-full"
               onClick={() => {
                 toast.loading("Saving...", { id: "cron" });
-                mutation.mutate({ id: props.workflowId, cron });
+                mutation.mutate({ workflowId: props.workflowId, cron });
               }}
               disabled={mutation.isPending || !validCron}
             >
